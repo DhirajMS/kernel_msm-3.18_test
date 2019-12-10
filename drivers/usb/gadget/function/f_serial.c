@@ -1114,7 +1114,9 @@ static struct usb_function *gser_alloc(struct usb_function_instance *fi)
 	opts = container_of(fi, struct f_serial_opts, func_inst);
 	if (nr_ports) {
 		opts->port_num = gser_next_free_port++;
-		if (opts->port_num >= GSERIAL_NO_PORTS) {
+
+		if(opts->port_num >= GSERIAL_NO_PORTS) {
+
 			pr_err("%s: No serial allowed for port %d\n",
 					__func__, opts->port_num);
 			return ERR_PTR(-EINVAL);
