@@ -4,7 +4,7 @@ before_install:
 - sudo apt-get install zip
 - sudo apt install ccache
 - sudo apt install liblz4-tool
-- git clone --depth=1 https://github.com/DhirajMS/kernel_msm-3.18 -b master ~/dhirajms
+- git clone --depth=1 https://github.com/DhirajMS/kernel_msm-3.18_test -b master ~/dhirajms
 - git clone --depth=1 https://github.com/DhirajMS/gcc-4.9-64 -b cm-14.1 ~/dhirajms/tc
 script:
 - cd ~/dhirajms
