@@ -993,9 +993,11 @@ skip_cqterri:
 				MMC_TRACE(mmc, "%s: completing tag -> %lu\n",
 					__func__, tag);
 				cmdq_finish_data(mmc, tag);
+
 			} else {
 				pr_err("%s: tag:%lu finish_data already done\n",
 						mmc_hostname(mmc), tag);
+
 			}
 		}
 	}

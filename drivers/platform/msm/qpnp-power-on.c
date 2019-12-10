@@ -29,6 +29,7 @@
 #include <linux/regulator/machine.h>
 #include <linux/regulator/of_regulator.h>
 #include <linux/qpnp/power-on.h>
+#include <linux/device.h>
 
 #define CREATE_MASK(NUM_BITS, POS) \
 	((unsigned char) (((1 << (NUM_BITS)) - 1) << (POS)))
@@ -159,6 +160,10 @@
 
 /* Wakeup event timeout */
 #define WAKEUP_TIMEOUT_MSEC			3000
+
+#ifdef MY_CONFIG_IS_KERNEL_USER          //add by steve.zhou
+#define MY_IS_KERNEL_USER 1
+#endif
 
 enum qpnp_pon_version {
 	QPNP_PON_GEN1_V1,
@@ -1308,9 +1313,12 @@ static int qpnp_pon_config_init(struct qpnp_pon *pon)
 					"Unable to get kpdpwr irq\n");
 				return cfg->state_irq;
 			}
-
+            #if defined(CONFIG_HQ_QL1520_POWERLOSS)||defined(CONFIG_HQ_QL1590_POWERLOSS)
+            cfg->support_reset = 0;
+            #else
 			rc = of_property_read_u32(pp, "qcom,support-reset",
 							&cfg->support_reset);
+            #endif
 
 			if (rc) {
 				if (rc == -EINVAL) {
@@ -1516,7 +1524,7 @@ static int qpnp_pon_config_init(struct qpnp_pon *pon)
 					"Incorrect S2 debounce time\n");
 				return -EINVAL;
 			}
-			rc = of_property_read_u32(pp, "qcom,s2-type",
+		/*	rc = of_property_read_u32(pp, "qcom,s2-type",
 							&cfg->s2_type);
 			if (rc) {
 				dev_err(&pon->spmi->dev,
@@ -1527,8 +1535,13 @@ static int qpnp_pon_config_init(struct qpnp_pon *pon)
 				dev_err(&pon->spmi->dev,
 					"Incorrect reset type specified\n");
 				return -EINVAL;
-			}
-
+			}*/
+	
+         	 #ifdef MY_IS_KERNEL_USER
+			cfg->s2_type = 7;
+		  #else
+			cfg->s2_type = 4;
+		  #endif
 		}
 		/*
 		 * Get the standard-key parameters. This might not be
@@ -1983,7 +1996,6 @@ static int read_gen2_pon_off_reason(struct qpnp_pon *pon, u16 *reason,
 
 	return 0;
 }
-
 static int qpnp_pon_probe(struct spmi_device *spmi)
 {
 	struct qpnp_pon *pon;

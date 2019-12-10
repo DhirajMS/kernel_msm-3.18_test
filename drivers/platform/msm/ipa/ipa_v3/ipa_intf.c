@@ -277,7 +277,9 @@ int ipa3_query_intf_tx_props(struct ipa_ioc_query_intf_tx_props *tx)
 		if (!strcmp(entry->name, tx->name)) {
 			/* add the entry check */
 			if (entry->num_tx_props != tx->num_tx_props) {
-				IPAERR_RL("invalid entry number(%u %u)\n",
+
+				IPAERR("invalid entry number(%u %u)\n",
+
 					entry->num_tx_props,
 						tx->num_tx_props);
 				mutex_unlock(&ipa3_ctx->lock);
@@ -323,7 +325,9 @@ int ipa3_query_intf_rx_props(struct ipa_ioc_query_intf_rx_props *rx)
 		if (!strcmp(entry->name, rx->name)) {
 			/* add the entry check */
 			if (entry->num_rx_props != rx->num_rx_props) {
-				IPAERR_RL("invalid entry number(%u %u)\n",
+
+				IPAERR("invalid entry number(%u %u)\n",
+
 					entry->num_rx_props,
 						rx->num_rx_props);
 				mutex_unlock(&ipa3_ctx->lock);
@@ -364,7 +368,9 @@ int ipa3_query_intf_ext_props(struct ipa_ioc_query_intf_ext_props *ext)
 		if (!strcmp(entry->name, ext->name)) {
 			/* add the entry check */
 			if (entry->num_ext_props != ext->num_ext_props) {
-				IPAERR_RL("invalid entry number(%u %u)\n",
+
+				IPAERR("invalid entry number(%u %u)\n",
+
 					entry->num_ext_props,
 						ext->num_ext_props);
 				mutex_unlock(&ipa3_ctx->lock);
