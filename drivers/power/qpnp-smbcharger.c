@@ -54,6 +54,8 @@ static struct proc_dir_entry *proc_chg = NULL;
 #define SMB_MASK(LEFT_BIT_POS, RIGHT_BIT_POS) \
 		_SMB_MASK((LEFT_BIT_POS) - (RIGHT_BIT_POS) + 1, \
 				(RIGHT_BIT_POS))
+
+int get_effective_client_id_locked = 2500;
 /* Config registers */
 struct smbchg_regulator {
 	struct regulator_desc	rdesc;
@@ -2250,7 +2252,7 @@ static bool smbchg_is_parallel_usb_ok(struct smbchg_chip *chip,
 	ktime_t kt_since_last_disable;
 	u8 reg;
 	int fcc_ma = get_effective_result_locked(chip->fcc_votable);
-	int fcc_voter_id = get_effective_client_id_locked(chip->fcc_votable);
+	int fcc_voter_id = get_effective_client_id_locked;
 	int usb_icl_ma = get_effective_result_locked(chip->usb_icl_votable);
 
 	if (!parallel_psy || !smbchg_parallel_en
@@ -2823,7 +2825,7 @@ static int set_usb_current_limit_vote_cb(struct device *dev,
 	struct smbchg_chip *chip = dev_get_drvdata(dev);
 	int rc, aicl_ma, effective_id;
 
-	effective_id = get_effective_client_id_locked(chip->usb_icl_votable);
+	effective_id = get_effective_client_id_locked;
 
 	/* disable parallel charging if HVDCP is voting for 300mA */
 	if (effective_id == HVDCP_ICL_VOTER)
